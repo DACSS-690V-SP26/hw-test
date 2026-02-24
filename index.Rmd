@@ -78,5 +78,11 @@ plot_carb= ggplot(mtcars_carb, aes(x=factor(Var1), y=Freq, label = Freq)) +
 plot_carb
 ```
 
+### Plot 3: Only 5-gear cars utilize the 6 and 8 carburetor setups. 
+```{r}
+plot3 = ggplot(data=mtcars,aes(x=factor(cyl))) + geom_bar(fill = "yellow") + facet_grid(gear~carb,labeller = label_both) + geom_text(stat = "count",
+    aes(label = scales::percent(after_stat(count / sum(count)))),hjust=0.5,vjust = 2, size=2, color='black', fontface = "bold") + labs(x='cylinders', title = 'Distribution of Cylinder Counts by Carburetors and Gears', caption = "Source: mtcars data") + theme_light()
+plot3
+```
 
 
