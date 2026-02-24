@@ -64,8 +64,19 @@ library(ggplot2)
 ### Plot 1: Three-Gear Cars are Dominant 
 ```{r}
 mtcars_cyl=mtcars$cyl|>table()|>as.data.frame()
-plot2= ggplot(mtcars_cyl, aes(x=factor(Var1), y=Freq, label=Freq)) +
+plot_cyl= ggplot(mtcars_cyl, aes(x=factor(Var1), y=Freq, label=Freq)) +
   geom_bar(stat = 'identity', fill = "lightgrey") +
-  geom_text(hjust=2,size=10, color='blue',fontface = "bold") + coord_flip() + labs(x='Gear', title = 'Count of Cars per GEAR', caption = "Source: mtcars data") + theme_classic() + theme(axis.title.x = element_blank(), axis.line.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
-plot2
+  geom_text(hjust=2,size=10, color='blue',fontface = "bold") + coord_flip() + labs(x='Gear', title = 'Count of Cars per GEAR', caption = "Source: mtcars data") + theme_classic() + theme(axis.title.x = element_blank(), axis.line.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank(), plot.title = element_text(face = "bold"), axis.title.y = element_text(face = "bold")) 
+plot_cyl
 ```
+### Plot 2: Few Cars have SIX or more Carburators 
+```{r}
+mtcars_carb = mtcars$carb|>table()|>as.data.frame()
+plot_carb= ggplot(mtcars_carb, aes(x=factor(Var1), y=Freq, label = Freq)) +
+  geom_bar(stat = 'identity', fill = "yellow") +
+  geom_text(hjust=0.5,vjust = -0.5, size=4, color='black') + labs(x='CARB', title = 'Count of Cars per CARB', caption = "Source: mtcars data") + theme_classic() + theme(axis.title.y = element_blank(), axis.line.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.title.x = element_text(face = "bold"), plot.title = element_text(face = "bold")) 
+plot_carb
+```
+
+
+
