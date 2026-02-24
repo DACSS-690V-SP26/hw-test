@@ -3,18 +3,22 @@ title: "My Storyboard at DACSS - frames"
 bibliography: testVisual.bib
 output: 
   flexdashboard::flex_dashboard:
-    storyboard: true
+    orientation: rows
+    vertical_layout: fill
 ---
 
 ```{r setup, include=FALSE}
 library(flexdashboard) # always
 ```
 
+# Setup
+
 ## Intro {.sidebar}
 
 Preparing the dashboard based on the instructions given at @magallanes_reyes_data_2022, and @aden-buie_flexdashboard_2026.
 
-
+Row
+-------------------------------------
 
 ### I know this is not nice, but wait till I finish the course
 
@@ -46,29 +50,27 @@ readRDS(url(link3))
 
 
 ### References
+<div id="refs"></div>
 
+---
 
-# HW2 
+# HW2
 
-## HW2 Instructions  {.sidebar}
-
-Replicating plots from Main Tools lecture. 
-
-### Loading the data 
-
-```{r}
-mtcars
-library(ggplot2)
-```
+Row
+-------------------------------------
 
 ### Plot 1: Three-Gear Cars are Dominant 
 ```{r}
-mtcars_cyl=mtcars$cyl|>table()|>as.data.frame()
-plot_cyl= ggplot(mtcars_cyl, aes(x=factor(Var1), y=Freq, label=Freq)) +
+library(ggplot2)
+mtcars_gear=mtcars$gear|>table()|>as.data.frame()
+plot_gear= ggplot(mtcars_gear, aes(x=factor(Var1), y=Freq, label=Freq)) +
   geom_bar(stat = 'identity', fill = "lightgrey") +
-  geom_text(hjust=2,size=10, color='blue',fontface = "bold") + coord_flip() + labs(x='Gear', title = 'Count of Cars per GEAR', caption = "Source: mtcars data") + theme_classic() + theme(axis.title.x = element_blank(), axis.line.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank(), plot.title = element_text(face = "bold"), axis.title.y = element_text(face = "bold")) 
-plot_cyl
+  geom_text(hjust=1,size=9, color='blue') + coord_flip() + labs(x='Gear', title = 'Count of Cars per GEAR', caption = "Source: mtcars data") + theme_classic() + theme(axis.title.x = element_blank(), axis.line.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank(), plot.title = element_text(face = "bold"), axis.title = element_text(face = "bold")) 
+plot_gear
 ```
+Row
+-------------------------------------
+
 ### Plot 2: Few Cars have SIX or more Carburators 
 ```{r}
 mtcars_carb = mtcars$carb|>table()|>as.data.frame()
@@ -77,6 +79,9 @@ plot_carb= ggplot(mtcars_carb, aes(x=factor(Var1), y=Freq, label = Freq)) +
   geom_text(hjust=0.5,vjust = -0.5, size=4, color='black') + labs(x='CARB', title = 'Count of Cars per CARB', caption = "Source: mtcars data") + theme_classic() + theme(axis.title.y = element_blank(), axis.line.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.title.x = element_text(face = "bold"), plot.title = element_text(face = "bold")) 
 plot_carb
 ```
+
+Row
+-------------------------------------
 
 ### Plot 3: Only 5-gear cars utilize the 6 and 8 carburetor setups. 
 ```{r}
