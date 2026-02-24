@@ -46,3 +46,26 @@ readRDS(url(link3))
 
 
 ### References
+
+
+# HW2 
+
+## HW2 Instructions  {.sidebar}
+
+Replicating plots from Main Tools lecture. 
+
+### Loading the data 
+
+```{r}
+mtcars
+library(ggplot2)
+```
+
+### Plot 1: Three-Gear Cars are Dominant 
+```{r}
+mtcars_cyl=mtcars$cyl|>table()|>as.data.frame()
+plot2= ggplot(mtcars_cyl, aes(x=factor(Var1), y=Freq, label=Freq)) +
+  geom_bar(stat = 'identity', fill = "lightgrey") +
+  geom_text(hjust=2,size=10, color='blue',fontface = "bold") + coord_flip() + labs(x='Gear', title = 'Count of Cars per GEAR', caption = "Source: mtcars data") + theme_classic() + theme(axis.title.x = element_blank(), axis.line.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+plot2
+```
