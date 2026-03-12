@@ -94,9 +94,6 @@ plot3
 
 # HW3
 
-Row
--------------------------------------
-
 ```{r setup-massdata, include=FALSE}
 library(readxl)
 mass_schools <- read_excel("ncesdata_MASS_202425.xlsx", skip = 10)
