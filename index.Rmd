@@ -154,7 +154,7 @@ Row
 ### Numeric Plot: 
 ```{r}
 mass_schools$`Student Teacher Ratio` <- as.numeric(mass_schools$`Student Teacher Ratio`)
-summary(mass_schools$`Student Teacher Ratio`)
+#summary(mass_schools$`Student Teacher Ratio`)
 
 library(moments)
 
