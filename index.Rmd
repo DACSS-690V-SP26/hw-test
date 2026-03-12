@@ -110,17 +110,16 @@ unique(mass_schools$Locale)
 
 absoluteLocale=table(mass_schools$Locale,
                  useNA = "ifany") 
-absoluteLocale
+
 
 tableFreq=as.data.frame(absoluteLocale)
-tableFreq
+
 
 propT=prop.table(absoluteLocale)*100
-propT
+
 
 names(tableFreq)=c("Locale","Count")
 tableFreq$Percent=as.vector(propT)
-tableFreq
 
 library(ggplot2)
 
