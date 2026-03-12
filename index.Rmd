@@ -148,6 +148,77 @@ Row
 
 ### Numeric Plot: 
 ```{r}
+mass_schools$`Student Teacher Ratio` <- as.numeric(mass_schools$`Student Teacher Ratio`)
+summary(mass_schools$`Student Teacher Ratio`)
 
+library(moments)
+
+md=median(mass_schools$`Student Teacher Ratio` ,na.rm = TRUE)
+mn=mean(mass_schools$`Student Teacher Ratio` ,na.rm = TRUE)
+sk=skewness(mass_schools$`Student Teacher Ratio` ,na.rm = TRUE)
+
+txtMean=paste0('Mean:',round(mn))
+txtSkew=paste0('Skewness:',round(sk,2))
+txtMedian=paste0('Median:',round(md,2))
+
+base=ggplot(mass_schools, aes(x=0, y=`Student Teacher Ratio`))+theme_classic()
+boxRatio=base + geom_boxplot() 
+
+box_data <- ggplot_build(boxRatio)$data[[1]]
+
+lower_whisker <- box_data$lower[1]  # numeric value of lower whisker
+upper_whisker <- box_data$upper[1]  # numeric value of upper whisker
+
+outliers <- box_data$outliers[[1]]
+
+lowOcount <- sum(outliers < lower_whisker)
+upperOcount <- sum(outliers > upper_whisker)
+
+txtOutliersUp <- paste0("upper outlying schools: ", upperOcount)
+txtOutliersLo <- paste0("lower outlying schools: ", lowOcount)
+
+y_upper_label <- upper_whisker * 2.75
+y_lower_label <- lower_whisker * 0.3
+
+vio=base+geom_violin(trim=FALSE, fill="grey")
+
+viobox=vio+ 
+        scale_y_continuous(trans = scales::pseudo_log_trans(base = 10)) + 
+        geom_boxplot(width=0.25,
+                        outlier.color = 'red',
+                        colour = 'white',
+                        fill='black') + coord_flip()
+
+viobox=viobox + theme(axis.text.y = element_blank(),
+                      axis.ticks.y = element_blank(),
+                      axis.title.y = element_blank()) + 
+               # about the outliers       
+                      annotate(geom = 'text',size=3,
+                               label=txtOutliersUp,
+                                y = y_upper_label,
+                                x=0.1,color='red',
+                                angle=0) +
+                      annotate(geom = 'text', size=3, 
+                               label=txtOutliersLo,
+                                y = y_lower_label,
+                                x=0.1,color='red',
+                                angle=0) +
+              # about the mean
+              geom_hline(yintercept = mn,color='darkgreen',
+                         linetype="dotted") +
+              # about the mean
+              annotate(geom = 'text',color='darkgreen',
+                       fontface = "bold",
+                       label=txtMean, # mean as text
+                       x = 0.22,
+                       y=mn+1,
+                       angle=90)   +
+                      annotate(geom = 'text',color='white', 
+                               size=3, fontface = "bold",
+                               label=txtMedian, # median as text
+                                x = 0,
+                                y=md-.75,
+                                angle=90)
+viobox 
 ```
 
