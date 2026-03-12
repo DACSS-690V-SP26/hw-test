@@ -99,6 +99,46 @@ Row
 
 ### Categorical Plot: 
 ```{r}
+library(readxl)
+mass_schools <- read_excel("ncesdata_MASS_202425.xlsx", skip = 10)
+colnames(mass_schools) <- as.character(mass_schools[1, ])
+mass_schools <- mass_schools[-1, ]
+head(mass_schools)
+
+str(mass_schools,width = 70,strict.width='cut')
+unique(mass_schools$Locale)
+
+absoluteLocale=table(mass_schools$Locale,
+                 useNA = "ifany") 
+absoluteLocale
+
+tableFreq=as.data.frame(absoluteLocale)
+tableFreq
+
+propT=prop.table(absoluteLocale)*100
+propT
+
+names(tableFreq)=c("Locale","Count")
+tableFreq$Percent=as.vector(propT)
+tableFreq
+
+library(ggplot2)
+
+tableFreq$Locale <- factor(tableFreq$Locale,
+                    levels = c("City, Large", "City, Midsize", "City, Small", "Suburban, Large", "Suburban, Midsize", "Suburban, Small", "Town, Distant", "Town, Fringe", "Rural, Distant", "Rural, Fringe"))
+
+base= ggplot(data = tableFreq, 
+             aes(x = Locale, y = Percent)) 
+titleText='Where are Public Schools located?'
+sub_titleText='Massachusetts - 2024-2025'
+sourceText='Source: National Center for Education Statistics'
+
+paste0(round(tableFreq$Percent,2), '%')
+LABELS=paste0(round(tableFreq$Percent,2), '%')
+
+plot1 = base + geom_col(fill ="gray") + labs(title=titleText, subtitle = sub_titleText, x =NULL, y = NULL,caption = sourceText) + theme_bw() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + geom_text(vjust=-0.25, size = 3.5, aes(y = Percent ,label = LABELS)) 
+plot1
+
 
 ```
 
