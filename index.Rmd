@@ -97,7 +97,6 @@ plot3
 Row
 -------------------------------------
 
-### Preparing the Data 
 ```{r setup-massdata, include=FALSE}
 library(readxl)
 mass_schools <- read_excel("ncesdata_MASS_202425.xlsx", skip = 10)
@@ -131,7 +130,7 @@ Row
 -------------------------------------
 
 ### Categorical Plot: Massachusetts School Locale
-```{r}
+```{r, echo=FALSE}
 base= ggplot(data = tableFreq, 
              aes(x = Locale, y = Percent)) 
 titleText='Where are Public Schools located?'
