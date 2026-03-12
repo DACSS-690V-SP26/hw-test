@@ -98,7 +98,7 @@ Row
 -------------------------------------
 
 ### Preparing the Data 
-```{r}
+```{r, echo=FALSE, results='hide'}
 library(readxl)
 mass_schools <- read_excel("ncesdata_MASS_202425.xlsx", skip = 10)
 colnames(mass_schools) <- as.character(mass_schools[1, ])
