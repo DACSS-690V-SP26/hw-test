@@ -90,4 +90,24 @@ plot3 = ggplot(data=mtcars,aes(x=factor(cyl))) + geom_bar(fill = "yellow") + fac
 plot3
 ```
 
+---
+
+# HW3
+
+Row
+-------------------------------------
+
+### Categorical Plot: 
+```{r}
+
+```
+
+
+Row
+-------------------------------------
+
+### Numeric Plot: 
+```{r}
+
+```
 
