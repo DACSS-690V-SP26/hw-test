@@ -97,7 +97,7 @@ plot3
 Row
 -------------------------------------
 
-### Categorical Plot: 
+### Categorical Plot: Massachusetts School Locale 
 ```{r}
 library(readxl)
 mass_schools <- read_excel("ncesdata_MASS_202425.xlsx", skip = 10)
