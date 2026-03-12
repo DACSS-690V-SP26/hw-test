@@ -134,7 +134,6 @@ titleText='Where are Public Schools located?'
 sub_titleText='Massachusetts - 2024-2025'
 sourceText='Source: National Center for Education Statistics'
 
-paste0(round(tableFreq$Percent,2), '%')
 LABELS=paste0(round(tableFreq$Percent,2), '%')
 
 plot1 = base + geom_col(fill ="gray") + labs(title=titleText, subtitle = sub_titleText, x =NULL, y = NULL,caption = sourceText) + theme_bw() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + geom_text(vjust=-0.25, size = 3.5, aes(y = Percent ,label = LABELS)) 
