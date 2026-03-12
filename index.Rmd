@@ -102,10 +102,10 @@ library(readxl)
 mass_schools <- read_excel("ncesdata_MASS_202425.xlsx", skip = 10)
 colnames(mass_schools) <- as.character(mass_schools[1, ])
 mass_schools <- mass_schools[-1, ]
-head(mass_schools)
+invisible(head(mass_schools))
 
-str(mass_schools,width = 70,strict.width='cut')
-unique(mass_schools$Locale)
+invisible(str(mass_schools,width = 70,strict.width='cut'))
+invisible(unique(mass_schools$Locale))
 
 absoluteLocale=table(mass_schools$Locale,
                  useNA = "ifany") 
