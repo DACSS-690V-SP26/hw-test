@@ -194,7 +194,8 @@ viobox=vio+
 
 viobox=viobox + theme(axis.text.y = element_blank(),
                       axis.ticks.y = element_blank(),
-                      axis.title.y = element_blank()) + 
+                      axis.title.y = element_blank(), 
+                      axis.text.x = element_text(angle = 90)) + 
                # about the outliers       
                       annotate(geom = 'text',size=3,
                                label=txtOutliersUp,
@@ -213,15 +214,16 @@ viobox=viobox + theme(axis.text.y = element_blank(),
               annotate(geom = 'text',color='darkgreen',
                        fontface = "bold",
                        label=txtMean, # mean as text
-                       x = 0.22,
+                       x = 0.6,
                        y=mn+1,
-                       angle=90)   +
-                      annotate(geom = 'text',color='white', 
+                       angle=0)   +
+                      annotate(geom = 'text',color='black', 
                                size=3, fontface = "bold",
                                label=txtMedian, # median as text
-                                x = 0,
+                                x = -.5,
                                 y=md-.75,
-                                angle=90)
+                                angle=0) +
+            labs(title= "Student Teacher Ratio", subtitle = "Massachusetts- 2024-2025", y = NULL,caption = sourceText)
 viobox 
 ```
 
