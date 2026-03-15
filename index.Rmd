@@ -68,6 +68,9 @@ plot_gear= ggplot(mtcars_gear, aes(x=factor(Var1), y=Freq, label=Freq)) +
   geom_text(hjust=1,size=9, color='blue') + coord_flip() + labs(x='Gear', title = 'Count of Cars per GEAR', caption = "Source: mtcars data") + theme_classic() + theme(axis.title.x = element_blank(), axis.line.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank(), plot.title = element_text(face = "bold"), axis.title = element_text(face = "bold")) 
 plot_gear
 ```
+
+
+
 Row
 -------------------------------------
 
@@ -129,14 +132,14 @@ Row
 ### Categorical Plot: Massachusetts School Locale
 ```{r, echo=FALSE}
 base= ggplot(data = tableFreq, 
-             aes(x = Locale, y = Percent)) 
+             aes(x = reorder(Locale, Percent), y = Percent)) 
 titleText='Where are Public Schools located?'
 sub_titleText='Massachusetts - 2024-2025'
 sourceText='Source: National Center for Education Statistics'
 
 LABELS=paste0(round(tableFreq$Percent,2), '%')
 
-plot1 = base + geom_col(fill ="gray") + labs(title=titleText, subtitle = sub_titleText, x =NULL, y = NULL,caption = sourceText) + theme_bw() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + geom_text(vjust=-0.25, size = 3.5, aes(y = Percent ,label = LABELS)) 
+plot1 = base + geom_col(fill ="gray") + labs(title=titleText, subtitle = sub_titleText, x =NULL, y = NULL,caption = sourceText) + theme_bw() + theme(axis.text.x = element_text(angle = 60, hjust = 1), axis.text.y = element_blank(), axis.ticks.y = element_blank()) + geom_text(vjust=-0.25, size = 3.5, aes(y = Percent ,label = LABELS)) 
 plot1
 
 
