@@ -323,8 +323,7 @@ basecat6 <- ggplot(TypeRaceDF, aes(x = Type, y = Counts, fill = Race)) +
       theme(axis.text.y =element_blank())
 basecat6
 ```
-Row
--------------------------------------
+
 
 ### Num-Num Visualization 
 ```{r}
@@ -366,14 +365,52 @@ COVIDplot
 
 ```
 
-Row
--------------------------------------
-
 ### Num-Cat Visualization 
 ```{r}
 
+summaryBy <- aggregate(
+  Age ~ `Arrest Type`,
+  data = Mass_Arrests,
+  FUN = function(x) c(median = median(x), min = min(x), max = max(x))
+)
 
+summaryBy=do.call(data.frame,summaryBy)
+
+names(summaryBy)=c('Type','median','min', 'max')
+
+
+
+summaryBy_long <- summaryBy %>%
+  pivot_longer(
+    cols = -Type,           
+    names_to = "stat",      
+    values_to = "age"     
+  )
+
+summaryBy_long$Type <- recode(summaryBy_long$Type,
+                               "F" = "Felony",
+                               "M" = "Misdemeanor",
+                               "W" = "Warrant", 
+                               "O" = "Other")
+  
+
+catnum <- ggplot(summaryBy_long, aes(x = Type, y = age, color = stat)) + 
+  geom_segment(aes(x = Type, xend = Type, y = 0, yend = age),
+               color = "grey50") +
+  geom_point(size = 5) +
+  geom_text(aes(label = round(age,1)),
+            hjust = .7, vjust = -0.85, 
+            size = 4, fontface = "bold", show.legend = FALSE) +
+  scale_color_manual(values = c("min" = "blue", "median" = "black", "max" = "red")) +
+  facet_grid(~stat) + 
+  coord_flip() + 
+  theme_light() +
+  ylab("Age") +
+  xlab("Arrest Type") +
+  ggtitle("Min, Median, and Max Age by Arrest Type") +
+  labs(subtitle = "Massachusetts Crimes 2019-2020",  caption = "Source: Massachusetts Arrest Data" )
+
+catnum
 ```
-
 
 
