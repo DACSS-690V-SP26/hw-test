@@ -324,7 +324,6 @@ basecat6 <- ggplot(TypeRaceDF, aes(x = Type, y = Counts, fill = Race)) +
 basecat6
 ```
 
-
 ### Num-Num Visualization 
 ```{r}
 COVID <- read.csv("covid-19.csv")
@@ -364,6 +363,7 @@ COVIDplot <- ggplot(covid_long, aes(x = MonthYear, y = Value, color = Metric)) +
 COVIDplot
 
 ```
+
 
 ### Num-Cat Visualization 
 ```{r}
@@ -411,6 +411,98 @@ catnum <- ggplot(summaryBy_long, aes(x = Type, y = age, color = stat)) +
   labs(subtitle = "Massachusetts Crimes 2019-2020",  caption = "Source: Massachusetts Arrest Data" )
 
 catnum
+```
+
+
+### Improved Plots 
+-----------------------
+```{r}
+safeALL <- read_xlsx("safeCities_ecoUI.xlsx")
+drop=c("Overall_Score")
+keep=setdiff(names(safeALL),drop)
+safe = safeALL[,keep]
+
+#install.packages("reshape2")
+library(reshape2)
+
+safeL=melt(safe, # all the data
+           id.vars = 'city') # unique id per row
+safeL$type=ifelse(grepl("_In_",safeL$variable),'input','output')
+
+safeL$variable=sub("_In_|_Out_",'_',safeL$variable)
+
+safeL$dimension=substr(safeL$variable, 1, 1)
+safeL$variable=gsub("^[A-Z]_", "", safeL$variable)
+
+safe_avg = aggregate(value ~ city + type + dimension, 
+                            data = safeL, 
+                            FUN = mean, 
+                            na.rm = TRUE)
+
+newLevels=c('DIGI','ENVIR','HEALTH','INFRA','PERS')
+safe_avg$dimension=factor(safe_avg$dimension,
+                          levels = c("D","E","H","I","P"),
+                          labels = newLevels,ordered = F)
+
+safe_avg_out=safe_avg[safe_avg$type=='output',]
+safe_avg_in=safe_avg[safe_avg$type=='input',]
+
+base_ave_out= ggplot(data = safe_avg_out)
+
+vars_ave_out=base_ave_out + aes(x = reorder(dimension,
+                                          value,median),
+                              y =reorder(city,
+                                         value,
+                                         median))
+
+geoms_ave_out=vars_ave_out + geom_tile(aes(fill = value))
+
+originalplotcities <- geoms_ave_out + 
+       scale_fill_gradient(low = 'white',
+                           high = "black") +
+       theme(axis.text.x = element_text(angle = 90,
+                                        hjust = 1,
+                                        size = 8),
+             axis.text.y = element_text(size = 6)) + labs(x="",y='')
+originalplotcities
+
+safe_avg_out <- safe_avg_out %>%
+  group_by(city) %>%
+  mutate(avg = mean(value)) %>%
+  ungroup()
+
+safe_avg_out$city <- reorder(safe_avg_out$city, safe_avg_out$avg)
+
+cutoff <- quantile(safe_avg_out$value, 0.95, na.rm = TRUE)
+
+improvedplotcities <- geoms_ave_out + 
+        scale_fill_viridis_c(option = "cividis", name = "Score") +
+       theme(axis.text.x = element_text(angle = 90,
+                                        hjust = 1,
+                                        size = 8),
+             axis.text.y = element_text(size = 6)) + labs(x="",y='') + 
+      scale_x_discrete(labels = c(
+  ENVIR = "Environment",
+  DIGI = "Digital",
+  PERS = "Personal",
+  INFRA = "Infrastructure",
+  HEALTH = "Health"
+)) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  theme(
+    panel.grid = element_blank(),
+    axis.title = element_blank()
+  ) + labs(title = "Safety of Countries Based on 5 Dimensions",
+                 x="",
+                 y="",
+                 caption = "Source: Safe Cities Data" ) + 
+   geom_text(
+    aes(label = ifelse(value >= cutoff, round(value, 0), "")),
+    size = 2.5, 
+    color = "black"
+  )
+improvedplotcities
+
 ```
 
 
