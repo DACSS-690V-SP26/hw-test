@@ -227,3 +227,153 @@ viobox=viobox + theme(axis.text.y = element_blank(),
 viobox 
 ```
 
+---
+
+# HW4
+
+### Cat-Cat Visualization 
+```{r}
+Mass_Arrests <- read_xlsx("Mass_Arrests.xlsx")
+TypeRaceTable=table(Mass_Arrests$`Arrest Type`, Mass_Arrests$Race)
+#TypeRaceTable
+
+library(magrittr)
+TypeRaceProp=prop.table(TypeRaceTable,
+                            margin = 2)%>%round(.,3)
+#TypeRaceProp
+
+TypeRaceDF=as.data.frame(TypeRaceTable)
+names(TypeRaceDF)=c("Type","Race","Counts")
+#TypeRaceDF
+
+TypeRaceDF$pctCol=100*as.data.frame(TypeRaceProp)[,3]
+#TypeRaceDF
+
+library(ggplot2)
+
+library(dplyr)
+
+race_totals <- TypeRaceDF %>%
+  group_by(Race) %>%
+  summarise(total_race = sum(Counts))
+
+TypeRaceDF <- TypeRaceDF %>%
+  left_join(race_totals, by = "Race")
+
+TypeRaceDF$Race <- factor(
+  TypeRaceDF$Race,
+  levels = race_totals$Race[order(-race_totals$total_race)]
+)
+
+race_totals <- TypeRaceDF %>%
+  group_by(Race) %>%
+  summarise(total_race = sum(Counts))
+
+TypeRaceDF$Race <- factor(
+  TypeRaceDF$Race,
+  levels = race_totals$Race[order(-race_totals$total_race)]
+)
+
+TypeRaceDF$Race <- factor(TypeRaceDF$Race, levels = rev(levels(TypeRaceDF$Race)))
+
+TypeRaceDF <- TypeRaceDF %>%
+  group_by(Type) %>%
+  mutate(
+    Prop = Counts / sum(Counts),
+    pct_label = paste0(round(Prop * 100, 1), "%")
+  ) %>%
+  ungroup()
+
+#install.packages("viridis")   
+library(viridis)
+
+TypeRaceDF <- TypeRaceDF %>%
+  mutate(Type = recode(Type,
+    "F" = "Felony",
+    "M" = "Misdemeanor",
+    "W" = "Warrant", 
+    "O" = "Other"
+  ))
+TypeRaceDF <- TypeRaceDF %>%
+  mutate(Race = recode(Race,
+    "B" = "Black/African American",
+    "W" = "White",
+    "H" = "Hispanic",
+    "I" = "American Indian or Alaskan Native", 
+    "O" = "Asian or Pacific Islander", 
+    "J" = "Middle Eastern or East Indian (South Asian)", 
+    "U" = "Unknown", 
+    "N" = "Not Applicable"
+  ))
+
+
+basecat6 <- ggplot(TypeRaceDF, aes(x = Type, y = Counts, fill = Race)) +
+  geom_bar(stat = "identity", position = "fill") +
+  scale_fill_viridis_d(option = "cividis") +
+  geom_text(
+  aes(label = ifelse(Prop > 0.05, pct_label, "")),
+  position = position_fill(vjust = 0.5),
+  size = 3) + 
+   labs(title = "Arrrest Distribution by Type and Race",
+                 subtitle = "Massachusetts Crimes 2019-2020",
+                 x="",
+                 y="",
+                 fill='Race',
+                 caption = "Source: Massachusetts Arrest Data") + 
+      theme(axis.text.y =element_blank())
+basecat6
+```
+Row
+-------------------------------------
+
+### Num-Num Visualization 
+```{r}
+COVID <- read.csv("covid-19.csv")
+
+#install.packages("lubridate")
+library(lubridate)
+
+COVID$MonthYear <- make_date(year = COVID$year, month = COVID$month)
+
+covid_monthly <- aggregate(
+  cbind(daily_cases_mean, daily_deaths_mean) ~ MonthYear,
+  data = COVID,
+  FUN = mean
+)
+min <- as.Date("2020-01-01")
+max <- as.Date("2024-12-01")
+
+library(tidyr)
+
+covid_long <- covid_monthly %>%
+  pivot_longer(cols = c(daily_cases_mean, daily_deaths_mean),
+               names_to = "Metric",
+               values_to = "Value")
+
+COVIDplot <- ggplot(covid_long, aes(x = MonthYear, y = Value, color = Metric)) +
+  geom_line() +
+  theme_light() + 
+  scale_x_date(limits = c(min, max), date_breaks = "3 months", date_labels = "%Y-%m") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  scale_y_log10(labels = scales::comma) + 
+  labs(title = "COVID Mean Cases and Deaths by Month",
+                 subtitle = "Global Means Jan 2020 - Jan 2025",
+                 x="Month & Year",
+                 y="Log Value",
+                 caption = "Source: COVID-19 data")
+
+COVIDplot
+
+```
+
+Row
+-------------------------------------
+
+### Num-Cat Visualization 
+```{r}
+
+
+```
+
+
+
